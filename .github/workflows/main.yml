@@ -1,0 +1,53 @@
+name: Run NYT Bestseller Scraper
+
+on:
+  schedule:
+    # Runs every Saturday at 07:00 AM EDT (11:00 AM UTC assuming EDT is UTC-4)
+    - cron: '0 11 * * 6'
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Install Google Chrome and Chromedriver
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable jq # jq is needed for the chromedriver version lookup
+        
+        # Determine Chrome version and download compatible Chromedriver
+        # This dynamically finds the latest stable chromedriver version
+        CHROMEDRIVER_VERSION_URL="https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json"
+        CHROMEDRIVER_VERSION=$(curl -s $CHROMEDRIVER_VERSION_URL | jq -r ".channels.Stable.version")
+        CHROMEDRIVER_DOWNLOAD_URL=$(curl -s $CHROMEDRIVER_VERSION_URL | jq -r ".channels.Stable.downloads.chromedriver[] | select(.platform == \"linux64\") | .url")
+
+        echo "Installing Chromedriver version: $CHROMEDRIVER_VERSION from $CHROMEDRIVER_DOWNLOAD_URL"
+        
+        # Download and install Chromedriver
+        sudo wget -O chromedriver.zip $CHROMEDRIVER_DOWNLOAD_URL
+        sudo unzip chromedriver.zip -d /usr/local/bin/
+        sudo chmod +x /usr/local/bin/chromedriver-linux64/chromedriver # Adjust path if needed after unzip
+        # Create a symlink to a more common path for simpler script usage if the unzip extracts to a subdirectory
+        sudo ln -sf /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+
+    - name: Run script
+      env:
+        NYT_API_KEY: ${{ secrets.NYT_API_KEY }}
+        SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+        SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
+        RECEIVER_EMAILS: ${{ secrets.RECEIVER_EMAILS }} # Comma-separated
+        # CHROMEDRIVER_PATH: /usr/local/bin/chromedriver # Explicitly set if not automatically found by Service
+      run: |
+        python nyt_bestsellers_scraper.py
