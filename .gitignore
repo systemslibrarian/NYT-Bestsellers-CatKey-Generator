@@ -7,9 +7,3 @@ __pycache__/
 env/
 venv/
 *.env
-
-# Logs
-*.log
-
-# CatKey Exports
-catkey_exports/
