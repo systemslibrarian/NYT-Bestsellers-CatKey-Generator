@@ -1,9 +1,42 @@
-# Python
+# Python cache and build files
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
-.Python/
-env/
-venv/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Logs
+*.log
+logs/
+nyt_catkey_*.log
+
+# Environment files (do NOT commit secrets)
+.env
 *.env
+
+# Output directories
+catkey_exports/
+*.txt
+*.csv
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# Jupyter / Colab
+.ipynb_checkpoints/
+
+# Selenium browser driver backups
+chromedriver
+chromedriver.exe
+geckodriver
+geckodriver.exe
