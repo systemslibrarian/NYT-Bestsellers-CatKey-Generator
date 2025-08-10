@@ -41,7 +41,7 @@ It automates the process of searching ISBNs from the New York Times Bestseller l
 - Selenium
 - tqdm
 - Access to NYT Books API
-- Library catalog URL (SirsiDynix Symphony Web Client)
+- Library catalog URL (SirsiDynix Enterprise Catalog)
 
 ### **Setup**
 1. Clone this repository:
