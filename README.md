@@ -1,27 +1,105 @@
-# Hi, I'm Paul — Application Systems Analyst & Data Analyst
+# 📚 NYT-Bestsellers-CatKey-Generator
 
-I believe in using **data** and **automation** to empower access to information and drive smarter decision-making.
+Automates the process of collecting **ISBNs** from the New York Times Bestseller lists, finding their matching **CatKeys** in your library’s catalog, and generating easy-to-use reports.  
 
-🎯 Dream role? Working at Google one day.  
-🛠️ Until then, I'm building, learning, and contributing — one project at a time.
-
----
-
-## 🏛️ Library Automation Tools
-- 🔗 [NYT‑Bestsellers‑CatKey‑Generator](https://github.com/systemslibrarian/NYT-Bestsellers-CatKey-Generator) — ISBN lookup tool for Solus/SirsiDynix integration
-
-## 🤖 AI & Language Workflows
-- 🔗 [Gemini‑ChatGPT‑Interaction](https://github.com/systemslibrarian/Gemini-ChatGPT-Interaction) — Comparing responses across LLMs
-- 🔗 [YouTube‑MP3‑Transcript‑Summary](https://github.com/systemslibrarian/YouTube-MP3-Transcript-Summary) — From audio to summary using Whisper + GPT
-
-## 📰 Data Ingestion & Scraping
-- 🔗 [pressreader-news-scraper](https://github.com/systemslibrarian/pressreader-news-scraper) — Store PressReader articles in SQLite
-
-## 📊 Data Analytics Projects
-- 🔗 [enterprise-customer-segmentation-analytics](https://github.com/systemslibrarian/enterprise-customer-segmentation-analytics) — 
-  Sample SQL & Python toolkit for data cleaning, customer segmentation, predictive modeling, and interactive dashboards.
-- 🔗 [imls-public-libraries-2022](https://github.com/systemslibrarian/imls-public-libraries-2022) — Visualizes key trends from the IMLS FY2022 Public Library Survey
+Designed for libraries using **SirsiDynix Symphony** and the **Solus Library App**.
 
 ---
 
-> 💬 Feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/systemslibrarian)
+## ✨ Features
+
+- 🔍 **Multi-list support** — Pull multiple NYT Bestseller categories in one run.
+- 🆔 **ISBN-10 / ISBN-13 detection** — Improves catalog match accuracy.
+- 🖥 **Automated catalog searches** via Selenium.
+- 📂 **Two reports per list**:  
+  - `*_found.txt` — Comma-separated CatKeys for direct Solus import.  
+  - `*_not_found.csv` — Books your library does **not** currently own.
+- 📧 **Automatic email delivery** of reports (optional).
+- 🛠 **Debug mode** for step-by-step output.
+
+---
+
+## 🛠 Requirements
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+You’ll need:
+- Python 3.8+
+- Google Chrome + ChromeDriver
+- NYT API Key ([Get one here](https://developer.nytimes.com/))
+- SirsiDynix Symphony catalog access
+
+---
+
+## ⚙️ Configuration
+
+All settings are controlled via **environment variables**:
+
+| Variable | Description |
+|----------|-------------|
+| `NYT_API_KEY` | Your NYT API key |
+| `SENDER_EMAIL` | Sender email address |
+| `SENDER_PASSWORD` | Email account password |
+| `RECEIVER_EMAILS` | Comma-separated recipient list |
+| `NYT_LIST_NAMES` | Comma-separated NYT list names (e.g. `hardcover-fiction,young-adult-hardcover`) |
+| `NYT_OUTPUT_DIR` | Directory for output files |
+| `NYT_LOG_DIR` | Directory for logs |
+| `CHROMEDRIVER_PATH` | Path to ChromeDriver |
+| `NYT_DEBUG` | `1` for detailed per-ISBN output |
+| `NYT_NO_EMAIL` | `1` to skip sending email |
+
+---
+
+## 🚀 Usage
+
+Run **all lists**:
+
+```bash
+./run_nyt_script.sh
+```
+
+Run **one category for quick testing**:
+
+```bash
+NYT_LIST_NAMES=hardcover-fiction ./NYT-to-Library-CatKey-Generator.py
+```
+
+Skip email sending:
+
+```bash
+NYT_NO_EMAIL=1 ./run_nyt_script.sh
+```
+
+---
+
+## 📄 Output Files
+
+For each NYT list processed, two files are created:
+
+1. **`<list>_found.txt`**  
+   - Comma-separated CatKeys — ready for Solus import.
+   - Example:  
+     ```
+     12345,67890,54321
+     ```
+
+2. **`<list>_not_found.csv`**  
+   - ISBN, title, and author of items **not in your catalog**.
+
+---
+
+## 💡 Why It’s Useful
+
+- Quickly identify NYT bestsellers your library already owns.
+- Instantly know which popular titles are missing from your collection.
+- Load found CatKeys directly into Solus “book rivers” — no manual formatting required.
+
+---
+
+## 📜 License
+
+MIT License — see [LICENSE](LICENSE) for details.
