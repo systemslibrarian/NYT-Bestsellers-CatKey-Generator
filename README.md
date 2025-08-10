@@ -1,24 +1,27 @@
 # NYT-to-Library-CatKey-Generator
 
-Fetch New York Times bestseller lists, search your SirsiDynix Enterprise catalog (LCPL example) via Selenium, and generate **CatKey** reports:
-- **FOUND** → TXT (per list: `List Name: catkey1,catkey2,...`)
-- **NOT FOUND** → CSV (`list_name,isbn13,author,title`)
-- Optional email delivery with both files attached.
+Fetch New York Times bestseller lists, search your SirsiDynix Enterprise catalog via Selenium, and generate **CatKey** reports.
 
-> Built and maintained by Paul Clark (systemslibrarian)
+**Features**
+- Pulls NYT bestseller lists via NYT Books API
+- Searches catalog by **ISBN-13**, falls back to **ISBN-10** when possible
+- Generates:
+  - **Found (TXT)** → per list, CatKeys only
+  - **Not Found (CSV)** → list, ISBN, title, author
+- Optional email with both files attached
+- Headless Chrome support for PythonAnywhere or other Linux environments
+- Debug mode prints each ISBN and search URL
 
 ---
 
 ## Why this exists
-- Automates weekly bestseller processing for selectors/tech services
-- Robust ISBN search: tries **ISBN-13**, then **ISBN-10** fallback (for 978-prefix)
-- Works headless on PythonAnywhere (or any Linux host with Chromium/Chrome + chromedriver)
+Designed for library selectors and tech services teams who need a **weekly, automated, accurate match** between NYT bestsellers and their library's holdings.
 
 ---
 
 ## Quick start
 
-1) **Clone**
+### 1. Clone repo
 ```bash
 git clone https://github.com/systemslibrarian/NYT-Bestsellers-CatKey-Generator.git
 cd NYT-Bestsellers-CatKey-Generator
