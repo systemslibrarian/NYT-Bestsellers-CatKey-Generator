@@ -1,7 +1,8 @@
 # 📚 NYT-to-Library-CatKey-Generator
 
 Automates the process of generating **library catalog keys (CatKeys)** from the **New York Times Bestseller API**.  
-Designed for libraries to easily integrate bestseller lists into their catalogs.
+
+Designed for libraries to easily integrate bestseller lists into their Solus App
 
 ---
 
