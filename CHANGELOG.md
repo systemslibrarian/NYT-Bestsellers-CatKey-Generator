@@ -1,22 +1,9 @@
 # Changelog
 
-## v3.0 — Enhanced Professional Edition (Single Catalog)
-**Refined Release — Single Catalog Only**
-
-### ✨ Key Changes
-- **Single Catalog Configuration**  
-  - Removed multi-catalog support and `--bases` runner flag.
-  - `CATALOG_BASE_URL` is now **required** and is the sole catalog endpoint.
-
-- **ASCII Art & Documentation**  
-  - ASCII banner, architecture, and troubleshooting tree retained.
-  - Function-level docstrings and comments throughout.
-
-- **Runner Simplification**  
-  - Loads `.env` (optional), supports debug, quick-test, and list overrides.
-  - Startup summary reflects single-catalog config.
-
-- **Security & Packaging**  
-  - No hardcoded credentials or URLs.
-  - Example `.env` shows LCPL as a sample (not required in code).
-  - Updated README for single-catalog assumptions.
+## v3.2 — 2025-08-17
+- Restored original filenames (`NYT-to-Library-CatKey-Generator.py`, `run_nyt_script.sh`, `.env`)
+- Removed multi-catalog complexity (single catalog only)
+- Clean README without ASCII art header
+- Added `.env.example` for safe template config
+- Added updated `.gitignore` rules
+- General cleanup and documentation improvements
