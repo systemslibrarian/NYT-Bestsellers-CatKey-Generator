@@ -1,105 +1,89 @@
-# 📚 NYT-Bestsellers-CatKey-Generator
+# NYT‑to‑Library CatKey Generator v3.0 — Enhanced Professional Edition (Single Catalog)
 
-Automates the process of collecting **ISBNs** from the New York Times Bestseller lists, finding their matching **CatKeys** in your library’s catalog, and generating easy-to-use reports.  
-
-Designed for libraries using **SirsiDynix Symphony** and the **Solus Library App**.
-
----
-
-## ✨ Features
-
-- 🔍 **Multi-list support** — Pull multiple NYT Bestseller categories in one run.
-- 🆔 **ISBN-10 / ISBN-13 detection** — Improves catalog match accuracy.
-- 🖥 **Automated catalog searches** via Selenium.
-- 📂 **Two reports per list**:  
-  - `*_found.txt` — Comma-separated CatKeys for direct Solus import.  
-  - `*_not_found.csv` — Books your library does **not** currently own.
-- 📧 **Automatic email delivery** of reports (optional).
-- 🛠 **Debug mode** for step-by-step output.
-
----
-
-## 🛠 Requirements
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
+```
+████████████████████████████████████████████████████████████████████████████████
+█                                                                              █
+█    ███    ██ ██    ██ ████████       ███████  █████  ████████ ██   ██ ███████ █
+█    ████   ██  ██  ██     ██         ██      ██   ██    ██    ██  ██  ██       █
+█    ██ ██  ██   ████      ██   █████ ██      ███████    ██    █████   █████    █
+█    ██  ██ ██    ██       ██         ██      ██   ██    ██    ██  ██  ██       █
+█    ██   ████    ██       ██          ███████ ██   ██    ██    ██   ██ ███████ █
+█                                                                              █
+█                     Library CatKey Generator v3.0                           █
+█                     Enhanced Professional Edition                            █
+█                                                                              █
+████████████████████████████████████████████████████████████████████████████████
 ```
 
-You’ll need:
+An automation tool that fetches **New York Times bestseller** lists and searches a **SirsiDynix Enterprise** catalog to extract **CatKeys**. Produces TXT/CSV reports and can email them.
+
+---
+
+## Files
+
+- `nyt_catkey_enhanced.py` — Full Python app (single catalog, ASCII docs, documented functions).
+- `run_nyt_script.sh` — Runner with ASCII header and optional `.env` loading.
+- `nyt_catkey.env.example` — Example configuration (LCPL provided as sample).
+
+> **No hardcoded LCPL in code.** Configure the catalog with `CATALOG_BASE_URL`.
+
+---
+
+## Requirements
+
 - Python 3.8+
-- Google Chrome + ChromeDriver
-- NYT API Key ([Get one here](https://developer.nytimes.com/))
-- SirsiDynix Symphony catalog access
+- Google Chrome + chromedriver (configurable via `CHROMEDRIVER_PATH`)
+- Python packages: `requests`, `selenium`, `tqdm`
 
----
-
-## ⚙️ Configuration
-
-All settings are controlled via **environment variables**:
-
-| Variable | Description |
-|----------|-------------|
-| `NYT_API_KEY` | Your NYT API key |
-| `SENDER_EMAIL` | Sender email address |
-| `SENDER_PASSWORD` | Email account password |
-| `RECEIVER_EMAILS` | Comma-separated recipient list |
-| `NYT_LIST_NAMES` | Comma-separated NYT list names (e.g. `hardcover-fiction,young-adult-hardcover`) |
-| `NYT_OUTPUT_DIR` | Directory for output files |
-| `NYT_LOG_DIR` | Directory for logs |
-| `CHROMEDRIVER_PATH` | Path to ChromeDriver |
-| `NYT_DEBUG` | `1` for detailed per-ISBN output |
-| `NYT_NO_EMAIL` | `1` to skip sending email |
-
----
-
-## 🚀 Usage
-
-Run **all lists**:
-
+Install packages:
 ```bash
-./run_nyt_script.sh
-```
-
-Run **one category for quick testing**:
-
-```bash
-NYT_LIST_NAMES=hardcover-fiction ./NYT-to-Library-CatKey-Generator.py
-```
-
-Skip email sending:
-
-```bash
-NYT_NO_EMAIL=1 ./run_nyt_script.sh
+pip install -r <(printf "requests\nselenium\ntqdm\n")
 ```
 
 ---
 
-## 📄 Output Files
+## Configuration
 
-For each NYT list processed, two files are created:
+**Required**
+- `SENDER_EMAIL`, `SENDER_PASSWORD`, `RECEIVER_EMAILS`
+- `NYT_API_KEY`
+- `NYT_LIST_NAMES` (or use defaults via runner)
+- `CATALOG_BASE_URL` (single base, no multi-catalog)
 
-1. **`<list>_found.txt`**  
-   - Comma-separated CatKeys — ready for Solus import.
-   - Example:  
-     ```
-     12345,67890,54321
-     ```
+**Optional (defaults)**
+- `NYT_OUTPUT_DIR`, `NYT_LOG_DIR`, `CHROMEDRIVER_PATH`
+- `SMTP_SERVER`, `SMTP_PORT`
+- `NYT_DEBUG`, `NYT_NO_EMAIL`
+- `NYT_MAX_RETRIES`, `NYT_REQUEST_TIMEOUT`, `NYT_PAGE_TIMEOUT`
 
-2. **`<list>_not_found.csv`**  
-   - ISBN, title, and author of items **not in your catalog**.
-
----
-
-## 💡 Why It’s Useful
-
-- Quickly identify NYT bestsellers your library already owns.
-- Instantly know which popular titles are missing from your collection.
-- Load found CatKeys directly into Solus “book rivers” — no manual formatting required.
+Copy and edit:
+```bash
+cp nyt_catkey.env.example .env
+```
 
 ---
 
-## 📜 License
+## Usage
 
-MIT License — see [LICENSE](LICENSE) for details.
+Make runner executable:
+```bash
+chmod +x run_nyt_script.sh
+```
+
+Run (loads `.env`):
+```bash
+./run_nyt_script.sh --env ./.env --quick-test --debug
+```
+
+---
+
+## Reports
+
+- **TXT**: Found CatKeys by list + combined list
+- **CSV**: Not‑found rows with list, ISBN, title, author
+
+---
+
+## License
+
+MIT
